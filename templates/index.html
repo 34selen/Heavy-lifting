@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Records</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1>Welcome, {{ user }}!</h1>
+    <h2>Your Records</h2>
+    <ul>
+      {% for record in records %}
+      <li>{{ record[0] }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Add a New Record</h2>
+    <form action="/add_record" method="post">
+      <label for="record_text">Record:</label>
+      <input
+        type="text"
+        id="record_text"
+        name="record_text"
+        required
+      /><br /><br />
+      <input type="submit" value="Add Record" />
+    </form>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </body>
+</html>
