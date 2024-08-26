@@ -27,12 +27,12 @@ CREATE TABLE IF NOT EXISTS records (
 
 -- users 테이블에 예시 데이터 삽입
 INSERT INTO users (name, id, password) VALUES
-('Alice', 'alice123', 'password1'),
-('Bob', 'bob234', 'password2'),
-('Charlie', 'charlie345', 'password3');
+('admin', 'admin', 'admin'),
+('guest', 'guest', 'guest'),
+('selen', 'selen', 'selen');
 
 -- records 테이블에 예시 데이터 삽입
 INSERT INTO records (uid, id, record_text) VALUES
-(1, 'alice123', 'Bench press: 80kg'),
-(2, 'bob234', 'Deadlift: 120kg'),
-(3, 'charlie345', 'Squat: 100kg');
+(1, 'admin', 'Cykor{selenIsGood}'),
+(2, 'guest', 'Squat: 100kg'),
+(3, 'selen', 'Deadlift: 120kg');

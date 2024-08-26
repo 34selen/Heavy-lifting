@@ -69,8 +69,8 @@ def login():
         if user and user[3] == password:
             login_user(User(uid=user[0], name=user[1], id=user[2], password=user[3]))
             return redirect(url_for('index'))
-        
-        return "Invalid credentials. Please try again."
+        error_message = "아이디 또는 비밀번호가 올바르지 않습니다. 다시 시도해 주세요."
+        return render_template('login.html', error=error_message)
 
     return render_template('login.html')
 
@@ -78,14 +78,25 @@ def login():
 def register():
     if request.method == 'POST':
         name = request.form['name']
-        id = request.form['id']
+        user_id = request.form['id']
         password = request.form['password']
 
         conn = MySQLdb.connect(**db_config)
         cur = conn.cursor()
 
-        # 사용자 정보 데이터베이스에 삽입
-        cur.execute("INSERT INTO users (name, id, password) VALUES (%s, %s, %s)", (name, id, password))
+        # id 중복 확인
+        cur.execute("SELECT COUNT(*) FROM users WHERE id = %s", (user_id,))
+        count = cur.fetchone()[0]
+        print(count)
+        if count > 0:
+            # id가 이미 존재하는 경우
+            cur.close()
+            conn.close()
+            error_message = "이미 존재하는 ID입니다."
+            return render_template('register.html', error=error_message)
+
+        # id가 중복되지 않으면 사용자 정보 삽입
+        cur.execute("INSERT INTO users (name, id, password) VALUES (%s, %s, %s)", (name, user_id, password))
         conn.commit()
 
         cur.close()
@@ -94,7 +105,6 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html')
-
 @app.route('/logout')
 @login_required
 def logout():

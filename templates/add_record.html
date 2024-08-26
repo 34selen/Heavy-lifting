@@ -20,7 +20,7 @@
   </head>
   <body class="bg-background">
     <div id="top-bar" class="flex w-full">
-      <img src="/static/images/Logo.png" class="w-[150px] p-4" />
+      <img src="/static/images/Logo.png" class="w-[100px] h-auto m-2" />
       <a
         href="{{ url_for('add_record') }}"
         class="p-3 mt-[6px] text-right ml-auto mr-[30px]"
@@ -32,18 +32,36 @@
         >Logout</a
       >
     </div>
-    <h2>Your Records</h2>
+    <hr class="border-t-2 border-gray-300" />
+    <div
+      class="max-w-4xl mx-auto p-6 flex flex-col items-center justify-center min-h-screen"
+      style="transform: translateY(-10%)"
+    >
+      <h2 class="text-4xl font-bold mb-4 text-center text-[white]">
+        Add a New Record
+      </h2>
 
-    <h2>Add a New Record</h2>
-    <form action="/add_record" method="post">
-      <label for="record_text">Record:</label>
-      <input
-        type="text"
-        id="record_text"
-        name="record_text"
-        required
-      /><br /><br />
-      <input type="submit" value="Add Record" />
-    </form>
+      <form
+        action="/add_record"
+        class="flex flex-col items-center justify-center mt-60 w-1/2"
+        method="post"
+      >
+        <input
+          type="text"
+          id="record_text"
+          placeholder="Record"
+          name="record_text"
+          class="w-full px-3 py-2 border border-[#d9d9d9] rounded-md"
+          required
+        /><br /><br />
+        <button
+          type="submit"
+          class="w-full bg-button text-white p-2 rounded-md text-base mt-6 font-normal leading-normal text-center"
+          value="Add Record"
+        >
+          Add record
+        </button>
+      </form>
+    </div>
   </body>
 </html>
