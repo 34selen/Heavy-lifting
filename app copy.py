@@ -61,8 +61,7 @@ def login():
 
         conn = MySQLdb.connect(**db_config)
         cur = conn.cursor()
-        print(f"SELECT * FROM users WHERE id ='{id}'")
-        cur.execute(f"SELECT * FROM users WHERE id ='{id}'")
+        cur.execute("SELECT * FROM users WHERE id = %s", (id,))
         user = cur.fetchone()
         cur.close()
         conn.close()
@@ -88,6 +87,7 @@ def register():
         # id 중복 확인
         cur.execute("SELECT COUNT(*) FROM users WHERE id = %s", (user_id,))
         count = cur.fetchone()[0]
+        print(count)
         if count > 0:
             # id가 이미 존재하는 경우
             cur.close()
