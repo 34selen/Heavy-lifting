@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Records</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: "#646F86",
+              button: "#3D3D3D",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-background">
+    <div id="top-bar" class="flex w-full">
+      <img src="/static/images/Logo.png" class="w-[150px] p-4" />
+      <a
+        href="{{ url_for('add_record') }}"
+        class="p-3 mt-[6px] text-right ml-auto mr-[30px]"
+        >add record</a
+      >
+      <a
+        href="{{ url_for('logout') }}"
+        class="p-3 mt-[6px] text-right mr-[30px]"
+        >Logout</a
+      >
+    </div>
+    <h2>Your Records</h2>
+
+    <h2>Add a New Record</h2>
+    <form action="/add_record" method="post">
+      <label for="record_text">Record:</label>
+      <input
+        type="text"
+        id="record_text"
+        name="record_text"
+        required
+      /><br /><br />
+      <input type="submit" value="Add Record" />
+    </form>
+  </body>
+</html>

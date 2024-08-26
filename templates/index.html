@@ -4,32 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Records</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: "#646F86",
+              button: "#3D3D3D",
+            },
+          },
+        },
+      };
+    </script>
   </head>
-  <body>
-    <h1>Welcome, {{ user }}!</h1>
-    <h2>Your Records</h2>
-    <ul>
-      {% for record in records %}
-      <li>{{ record[0] }}</li>
-      {% endfor %}
-    </ul>
-
-    <h2>Add a New Record</h2>
-    <form action="/add_record" method="post">
-      <label for="record_text">Record:</label>
-      <input
-        type="text"
-        id="record_text"
-        name="record_text"
-        required
-      /><br /><br />
-      <input type="submit" value="Add Record" />
-    </form>
-
-    <a href="{{ url_for('logout') }}">Logout</a>
+  <body class="bg-background">
+    <div id="top-bar" class="flex w-full h-[60px]">
+      <img src="/static/images/Logo.png" class="w-[100px] h-auto m-2" />
+      <a
+        href="{{ url_for('add_record') }}"
+        class="p-3 mt-[6px] text-right ml-auto mr-[30px] text-[white]"
+        >add record</a
+      >
+      <a
+        href="{{ url_for('logout') }}"
+        class="p-3 mt-[6px] text-right mr-[30px] text-[white]"
+        >Logout</a
+      >
+    </div>
+    <hr class="border-t-2 border-gray-300" />
+    <div class="max-w-4xl mx-auto p-6 text-[white]">
+      <h1 class="text-4xl font-bold mb-4 text-center">Welcome, {{ user }}!</h1>
+      <h2 class="text-2xl font-semibold mb-6">Your Records</h2>
+      <ul class="list-disc list-inside space-y-2 pl-5">
+        {% for record in records|reverse %}
+        <li class="text-lg">{{ record[0] }}</li>
+        {% endfor %}
+      </ul>
+    </div>
   </body>
 </html>

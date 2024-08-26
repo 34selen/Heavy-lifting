@@ -74,13 +74,34 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        id = request.form['id']
+        password = request.form['password']
+
+        conn = MySQLdb.connect(**db_config)
+        cur = conn.cursor()
+
+        # 사용자 정보 데이터베이스에 삽입
+        cur.execute("INSERT INTO users (name, id, password) VALUES (%s, %s, %s)", (name, id, password))
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/add_record', methods=['POST'])
+@app.route('/add_record', methods=['GET','POST'])
 @login_required
 def add_record():
     if request.method == 'POST':
@@ -94,33 +115,7 @@ def add_record():
         conn.close()
 
         return redirect(url_for('index'))
-
-@app.route('/debug', methods=['GET', 'POST'])
-def debug():
-    if request.method == 'POST':
-        id = request.form['id']
-        password = request.form['password']
-
-        conn = MySQLdb.connect(**db_config)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE id = %s", (id,))
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-
-        if user and user[3] == password:
-            login_user(User(uid=user[0], name=user[1], id=user[2], password=user[3]))
-            return redirect(url_for('index'))
-        
-        return "Invalid credentials. Please try again."
-    else:
-        conn = MySQLdb.connect(**db_config)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users")
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-        return render_template('login.html')
+    return render_template('add_record.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
