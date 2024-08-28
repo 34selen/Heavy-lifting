@@ -119,7 +119,6 @@ def add_record():
 
         conn = MySQLdb.connect(**db_config)
         cur = conn.cursor()
-        print(f"INSERT INTO records (id, record_text) VALUES ('{current_user.id}', '{record_text}')")
         cur.execute(f"INSERT INTO records (id, record_text) VALUES ('{current_user.id}', '{record_text}')")
         conn.commit()
         cur.close()

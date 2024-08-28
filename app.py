@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import MySQLdb
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+import util
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -46,7 +47,7 @@ def index():
     # 현재 로그인된 사용자의 기록만 조회합니다.
     conn = MySQLdb.connect(**db_config)
     cur = conn.cursor()
-    cur.execute(f"SELECT record_text FROM records WHERE id = '{current_user.id}'")
+    cur.execute("SELECT record_text FROM records WHERE id = %s",(current_user.id,))
     records = cur.fetchall()
     cur.close()
     conn.close()
@@ -61,8 +62,9 @@ def login():
 
         conn = MySQLdb.connect(**db_config)
         cur = conn.cursor()
-        print(f"SELECT * FROM users WHERE id ='{id}'")
-        cur.execute(f"SELECT * FROM users WHERE id ='{id}'")
+        if(util.filter(id) or util.filter(password)):
+            return '필터링됨'
+        cur.execute(f"SELECT * FROM users WHERE id ='{id}' and password= '{password}'")   # 여기가 취약점임
         user = cur.fetchone()
         cur.close()
         conn.close()
@@ -119,8 +121,7 @@ def add_record():
 
         conn = MySQLdb.connect(**db_config)
         cur = conn.cursor()
-        print(f"INSERT INTO records (id, record_text) VALUES ('{current_user.id}', '{record_text}')")
-        cur.execute(f"INSERT INTO records (id, record_text) VALUES ('{current_user.id}', '{record_text}')")
+        cur.execute("INSERT INTO records (id, record_text) VALUES (%s, %s)",(current_user.id,record_text))
         conn.commit()
         cur.close()
         conn.close()
