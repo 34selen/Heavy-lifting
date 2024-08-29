@@ -1,16 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for
 import MySQLdb
+import binascii
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import util
+import os
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = binascii.hexlify(os.urandom(24)).decode()
 
 # MySQL 설정
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'gkskgksj0!',
+    'password': 'password',
     'db': 'heavy_lift'
 }
 
@@ -130,4 +132,4 @@ def add_record():
     return render_template('add_record.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8000)
