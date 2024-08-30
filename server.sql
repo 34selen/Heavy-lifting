@@ -5,7 +5,6 @@ CREATE USER IF NOT EXISTS 'appuser'@'%' IDENTIFIED BY 'app_password';
 GRANT ALL PRIVILEGES ON heavy_lift.* TO 'appuser'@'%';
 FLUSH PRIVILEGES;
 
-
 USE heavy_lift;
 
 DROP TABLE IF EXISTS users;
