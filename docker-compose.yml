@@ -8,12 +8,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: heavy_lift
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: app_password
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./server.sql:/docker-entrypoint-initdb.d/server.sql
 
   flask:
     build: .
@@ -23,8 +24,8 @@ services:
       FLASK_ENV: development
       MYSQL_HOST: db
       MYSQL_DATABASE: heavy_lift
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: app_password
     ports:
       - "8000:8000"
     depends_on:

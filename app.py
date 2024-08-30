@@ -10,10 +10,10 @@ app.secret_key = binascii.hexlify(os.urandom(24)).decode()
 
 # MySQL 설정
 db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'password',
-    'db': 'heavy_lift'
+    'host': os.getenv('MYSQL_HOST', 'db'),
+    'user': os.getenv('MYSQL_USER', 'appuser'),
+    'password': os.getenv('MYSQL_PASSWORD', 'app_password'),
+    'db': os.getenv('MYSQL_DATABASE', 'heavy_lifts')
 }
 
 FLAG = 'FAKEFLAG'
@@ -132,4 +132,10 @@ def add_record():
     return render_template('add_record.html')
 
 if __name__ == '__main__':
+    try:
+        conn = MySQLdb.connect(**db_config)
+        conn.close()
+        print("MySQL 연결 성공")
+    except MySQLdb.Error as err:
+        print(f"MySQL 연결 실패: {err}")
     app.run(host='0.0.0.0', port=8000)
