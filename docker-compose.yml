@@ -10,8 +10,7 @@ services:
       MYSQL_DATABASE: heavy_lift
       MYSQL_USER: appuser
       MYSQL_PASSWORD: app_password
-    ports:
-      - "3307:3306"
+
     volumes:
       - ./server.sql:/docker-entrypoint-initdb.d/server.sql
 
@@ -26,7 +25,7 @@ services:
       MYSQL_USER: appuser
       MYSQL_PASSWORD: app_password
     ports:
-      - "8000:8000"
+      - "0:8000"
     depends_on:
       - db
 

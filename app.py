@@ -58,22 +58,24 @@ def login():
     if request.method == 'POST':
         id = request.form['id']
         password = request.form['password']
+        try:
+            conn = MySQLdb.connect(**db_config)
+            cur = conn.cursor()
+            if(util.filter(id) or util.filter(password)):
+                return '필터링됨'
+            cur.execute(f"SELECT * FROM users WHERE id ='{id}' and password= '{password}'")  
+            user = cur.fetchone()
+            cur.close()
+            conn.close()
 
-        conn = MySQLdb.connect(**db_config)
-        cur = conn.cursor()
-        if(util.filter(id) or util.filter(password)):
-            return '필터링됨'
-        cur.execute(f"SELECT * FROM users WHERE id ='{id}' and password= '{password}'")  
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-
-        if user and user[3] == password:
-            login_user(User(uid=user[0], name=user[1], id=user[2], password=user[3]))
-            return redirect(url_for('index'))
-        error_message = "아이디 또는 비밀번호가 올바르지 않습니다. 다시 시도해 주세요."
-        return render_template('login.html', error=error_message)
-
+            if user and user[3] == password:
+                login_user(User(uid=user[0], name=user[1], id=user[2], password=user[3]))
+                return redirect(url_for('index'))
+            error_message = "다시 시도해 주세요."
+            return render_template('login.html', error=error_message)
+        except MySQLdb.Error as e:
+            error_message = "다시 시도해 주세요."
+            return render_template('login.html', error=error_message)
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -82,26 +84,28 @@ def register():
         name = request.form['name']
         user_id = request.form['id']
         password = request.form['password']
+        try:
+            conn = MySQLdb.connect(**db_config)
+            cur = conn.cursor()
+            if(util.filter(id) or util.filter(password)):
+                return '필터링됨'
+            cur.execute("SELECT COUNT(*) FROM users WHERE id = %s", (user_id,))
+            count = cur.fetchone()[0]
+            if count > 0:
+                cur.close()
+                conn.close()
+                error_message = "이미 존재하는 ID입니다."
+                return render_template('register.html', error=error_message)
 
-        conn = MySQLdb.connect(**db_config)
-        cur = conn.cursor()
+            cur.execute("INSERT INTO users (name, id, password) VALUES (%s, %s, %s)", (name, user_id, password))
+            conn.commit()
 
-        cur.execute("SELECT COUNT(*) FROM users WHERE id = %s", (user_id,))
-        count = cur.fetchone()[0]
-        if count > 0:
             cur.close()
             conn.close()
-            error_message = "이미 존재하는 ID입니다."
-            return render_template('register.html', error=error_message)
 
-        cur.execute("INSERT INTO users (name, id, password) VALUES (%s, %s, %s)", (name, user_id, password))
-        conn.commit()
-
-        cur.close()
-        conn.close()
-
-        return redirect(url_for('login'))
-
+            return redirect(url_for('login'))
+        except MySQLdb.Error as e:
+            render_template('register.html')
     return render_template('register.html')
 @app.route('/logout')
 @login_required
@@ -114,15 +118,17 @@ def logout():
 def add_record():
     if request.method == 'POST':
         record_text = request.form['record_text']
+        try:
+            conn = MySQLdb.connect(**db_config)
+            cur = conn.cursor()
+            cur.execute("INSERT INTO records (id, record_text) VALUES (%s, %s)",(current_user.id,record_text))
+            conn.commit()
+            cur.close()
+            conn.close()
 
-        conn = MySQLdb.connect(**db_config)
-        cur = conn.cursor()
-        cur.execute("INSERT INTO records (id, record_text) VALUES (%s, %s)",(current_user.id,record_text))
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        return redirect(url_for('index'))
+            return redirect(url_for('index'))
+        except MySQLdb.Error as e:
+            return render_template('add_record.html')
     return render_template('add_record.html')
 
 if __name__ == '__main__':
