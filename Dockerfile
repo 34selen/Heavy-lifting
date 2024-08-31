@@ -12,7 +12,13 @@ RUN apt-get update && apt-get install -y \
 COPY . .
 
 
+RUN apt-get update && apt-get install -y \
+    python3-dev \
+    default-libmysqlclient-dev \
+    build-essential
+
 RUN pip install --no-cache-dir -r requirements.txt
+
 
 
 ENV FLASK_APP=app.py

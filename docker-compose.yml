@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -13,7 +13,6 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
       - ./server.sql:/docker-entrypoint-initdb.d/server.sql
 
   flask:

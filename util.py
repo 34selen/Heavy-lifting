@@ -2,7 +2,7 @@ import re
 
 def filter(user_input):
     dangerous_keywords = [
-        "'",'"',"0x",'char','benchmark','substr','instr','sleep','like','ascii','#'
+        "'",'"',"0x",'char','benchmark','substr','instr','sleep','like','ascii','#','schema'
     ]
 
     for keyword in dangerous_keywords:
