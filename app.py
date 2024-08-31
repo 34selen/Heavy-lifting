@@ -13,17 +13,15 @@ db_config = {
     'host': os.getenv('MYSQL_HOST', 'db'),
     'user': os.getenv('MYSQL_USER', 'appuser'),
     'password': os.getenv('MYSQL_PASSWORD', 'app_password'),
-    'db': os.getenv('MYSQL_DATABASE', 'heavy_lifts')
+    'db': os.getenv('MYSQL_DATABASE', 'heavy_lift')
 }
 
-FLAG = 'FAKEFLAG'
 
-# Flask-Login 설정
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# 사용자 모델
+
 class User(UserMixin):
     def __init__(self, uid, name, id, password):
         self.uid = uid
@@ -46,7 +44,6 @@ def load_user(user_id):
 @app.route('/')
 @login_required
 def index():
-    # 현재 로그인된 사용자의 기록만 조회합니다.
     conn = MySQLdb.connect(**db_config)
     cur = conn.cursor()
     cur.execute("SELECT record_text FROM records WHERE id = %s",(current_user.id,))
@@ -66,7 +63,7 @@ def login():
         cur = conn.cursor()
         if(util.filter(id) or util.filter(password)):
             return '필터링됨'
-        cur.execute(f"SELECT * FROM users WHERE id ='{id}' and password= '{password}'")   # 여기가 취약점임
+        cur.execute(f"SELECT * FROM users WHERE id ='{id}' and password= '{password}'")  
         user = cur.fetchone()
         cur.close()
         conn.close()
@@ -89,17 +86,14 @@ def register():
         conn = MySQLdb.connect(**db_config)
         cur = conn.cursor()
 
-        # id 중복 확인
         cur.execute("SELECT COUNT(*) FROM users WHERE id = %s", (user_id,))
         count = cur.fetchone()[0]
         if count > 0:
-            # id가 이미 존재하는 경우
             cur.close()
             conn.close()
             error_message = "이미 존재하는 ID입니다."
             return render_template('register.html', error=error_message)
 
-        # id가 중복되지 않으면 사용자 정보 삽입
         cur.execute("INSERT INTO users (name, id, password) VALUES (%s, %s, %s)", (name, user_id, password))
         conn.commit()
 

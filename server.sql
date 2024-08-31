@@ -37,5 +37,3 @@ INSERT INTO records (uid, id, record_text) VALUES
 (1, 'admin', 'Cykor{selenIsGood}'),
 (2, 'guest', 'Squat: 100kg'),
 (3, 'selen', 'Deadlift: 120kg');
-
-select * from users;
