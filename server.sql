@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS records (
 
 
 INSERT INTO users (name, id, password) VALUES
-('admin', 'admin', 'admin'),
+('admin', 'admin', 'censored'), -- password는 가짜임
 ('guest', 'guest', 'guest'),
 ('selen', 'selen', 'selen');
 
 
 INSERT INTO records (uid, id, record_text) VALUES
-(1, 'admin', 'Cykor{selenIsGood}'),
+(1, 'admin', 'Cykor{FAKE_FLAG}'),
 (2, 'guest', 'Squat: 100kg'),
 (3, 'selen', 'Deadlift: 120kg');
