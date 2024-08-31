@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS records (
 
 
 INSERT INTO users (name, id, password) VALUES
-('admin', 'admin', 'censored'), -- password는 가짜임
+('admin', 'admin', 'FakeAdminPassword'), 
 ('guest', 'guest', 'guest'),
 ('selen', 'selen', 'selen');
 
