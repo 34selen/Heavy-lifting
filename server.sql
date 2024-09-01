@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS records (
 
 
 INSERT INTO users (name, id, password) VALUES
-('admin', 'admin', 'FakeAdminPassword'), 
+('admin', 'admin', '9Z7a1i15Ro3mQKrqPhtt3To4L9aiLY'), 
 ('guest', 'guest', 'guest'),
 ('selen', 'selen', 'selen');
 
 
 INSERT INTO records (uid, id, record_text) VALUES
-(1, 'admin', 'Cykor{FAKE_FLAG}'),
+(1, 'admin', 'Cykor{Th1s-Qu3ry-1s-T00-HEavy}'),
 (2, 'guest', 'Squat: 100kg'),
 (3, 'selen', 'Deadlift: 120kg');
